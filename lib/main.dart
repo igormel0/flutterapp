@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'home_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -90,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> loginNoServidor() async {
-    // Para teste no Chrome, usamos localhost
+    // API rodando na porta 8081
     final url = Uri.parse('http://localhost:8081/login');
 
     try {
@@ -115,7 +117,13 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
-        _mostrarAlerta("Bem-vindo!", "Login realizado com sucesso.");
+        // Login bem-sucedido - navega para a página inicial
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(usuario: usuario),
+          ),
+        );
       } else if (response.statusCode == 403) {
         _mostrarAlerta("Erro", "Usuário ou senha incorretos.");
       } else {
